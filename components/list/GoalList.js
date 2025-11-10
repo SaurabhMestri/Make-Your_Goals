@@ -10,9 +10,8 @@ function GoalList({ goals, onEdit, onDelete }) {
         renderItem={({ item, index }) => (
           <GoalItem
             item={item}
-            index={index}
-            onEdit={onEdit}
-            onDelete={onDelete}
+            onEdit={() => onEdit(index)}
+            onDelete={() => onDelete(index)}
           />
         )}
       />

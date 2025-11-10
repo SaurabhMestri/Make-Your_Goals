@@ -1,39 +1,71 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
-function GoalItem({ item, index, onEdit, onDelete }) {
+export default function GoalItem({ item, onDelete, onEdit }) {
+  const isExpired = new Date(item.endDate) < new Date();
+
   return (
-    <View style={styles.listItem}>
-      <Text style={styles.listText}>{item.text}</Text>
+    <View style={styles.goalItem}>
+      <TouchableOpacity onPress={onEdit} style={{ flex: 1 }}>
+        <Text
+          style={[
+            styles.goalText,
+            isExpired && styles.expiredText, // 👈 underline-through expired
+          ]}
+        >
+          {item.text}
+        </Text>
+        <Text style={styles.dateText}>
+          {new Date(item.startDate).toDateString()} →{" "}
+          {new Date(item.endDate).toDateString()}
+        </Text>
+      </TouchableOpacity>
+
       <View style={styles.actions}>
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => onEdit(index)}
-        >
-          <Text style={styles.actionText}>Edit</Text>
+        <TouchableOpacity onPress={onEdit}>
+          <Text style={styles.editText}>✏️</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.deleteButton}
-          onPress={() => onDelete(index)}
-        >
-          <Text style={styles.deleteText}>Delete</Text>
+        <TouchableOpacity onPress={onDelete}>
+          <Text style={styles.deleteText}>🗑️</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
-export default GoalItem;
 
 const styles = StyleSheet.create({
-  listItem: {
+  goalItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
-    padding: 12,
+    borderWidth: 1,
+    borderColor: "#ccc",
     borderRadius: 8,
-    marginVertical: 6,
+    padding: 12,
+    marginVertical: 5,
   },
-  listText: { flex: 1, color: "#000", fontWeight: "500", fontSize: 15 },
-  actions: { flexDirection: "row", gap: 10 },
-  deleteText: { color: "red", fontWeight: "600" },
+  goalText: {
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  expiredText: {
+    textDecorationLine: "line-through",
+    color: "gray",
+  },
+  dateText: {
+    fontSize: 12,
+    color: "#666",
+  },
+  actions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  editText: {
+    fontSize: 18,
+    color: "#007bff",
+  },
+  deleteText: {
+    fontSize: 18,
+    color: "#ff3333",
+  },
 });
